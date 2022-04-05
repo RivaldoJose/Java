@@ -1,0 +1,6 @@
+package br.com.rivaldo.petshop.domain.tests;
+
+@test
+public class CaesTest {
+
+}

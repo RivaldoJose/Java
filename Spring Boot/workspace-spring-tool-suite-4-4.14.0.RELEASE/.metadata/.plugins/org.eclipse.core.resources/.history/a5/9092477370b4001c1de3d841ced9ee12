@@ -1,0 +1,9 @@
+package br.com.rivaldo.petshop.controller;
+
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class CaesController {
+	
+	//private Caes
+}

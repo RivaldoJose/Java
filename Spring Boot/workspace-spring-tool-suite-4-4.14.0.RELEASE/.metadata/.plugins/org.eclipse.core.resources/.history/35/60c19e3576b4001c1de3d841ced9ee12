@@ -1,0 +1,74 @@
+package br.com.rivaldo.petshop.controller;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
+
+import br.com.rivaldo.petshop.domain.Caes;
+import br.com.rivaldo.petshop.repository.CaesRepository;
+
+@RestController
+@RequestMapping("api/caes")
+public class CaesController {
+	@Autowired
+	private CaesRepository caesRepository;
+
+	@RequestMapping
+	public List<Caes> listarCaes() {
+		return caesRepository.findAll();
+	}
+	
+	@GetMapping("/{codigo}")
+	public Caes obterCao(@PathVariable Short codigo) {
+		try {
+			Optional<Caes> cao = caesRepository.findById(codigo);
+			return cao.get();
+			
+		} catch (RuntimeException e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Erro ao tentar procurar pelo cão.", e);
+		}
+		
+	}
+	
+	@PostMapping
+	public Caes criarCao(@RequestBody Caes cao) {
+		try {
+			return caesRepository.save(cao);
+		} catch (RuntimeException e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Erro ao tentar criar o registro do Cão.", e);
+		}
+	}
+	
+	@PutMapping
+	public Caes atualizarCao(@RequestBody Caes cao) {
+		try {
+			return caesRepository.save(cao);
+		} catch (RuntimeException e) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Registro de Cão não encontrado.", e);
+		}
+	}
+	
+	@DeleteMapping
+	public Caes deletarCao(@PathVariable Short codigo) {
+		try {
+			Optional<Caes> cao = caesRepository.findById(codigo);
+			caesRepository.delete(cao.get());
+			return cao.get();
+		} catch (RuntimeException e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Erro ao tentar deletar o cão.", e);
+		}
+		
+	}
+	
+}
